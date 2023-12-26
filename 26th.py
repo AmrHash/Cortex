@@ -412,20 +412,18 @@ st.write(data)
 
 ######################################################################333
 
-# Calculate MACD
-macd_indicator = ta.trend.MACD(close=data['Close'], window_fast=12, window_slow=26, window_signal=9)
+st.header('Moving Average Convergence Divergence (MACD) - is a trend-following momentum indicator that helps identify potential trend changes.')
+# Calculate the MACD
+data["26-day EMA"] = data["Close"].ewm(span=26).mean()
+data["12-day EMA"] = data["Close"].ewm(span=12).mean()
+data["MACD"] = data["12-day EMA"] - data["26-day EMA"]
+data["Signal"] = data["MACD"].ewm(span=9).mean()
 
-st.title("Moving Average Convergence Divergence (MACD) Visualization")
-
-st.header("MACD")
-st.text("The Moving Average Convergence Divergence (MACD) is a trend-following momentum indicator that shows the relationship between two moving averages of a security's price.")
-
-st.line_chart(macd_indicator.macd())
-st.line_chart(macd_indicator.macd_signal())
-st.line_chart(macd_indicator.macd_diff())
-
-st.subheader("DataFrame with MACD Indicator")
-st.write(data)
+# Plot the MACD
+st.text('MACD Chart')
+st.line_chart(data["MACD"])
+st.text('Signal Chart')
+st.line_chart(data["Signal"])
 ###############################################################################
 # Mass Index
 mass_index = ta.trend.MassIndex(high=data['High'], low=data['Low'], window_fast=9, window_slow=25)
@@ -440,20 +438,6 @@ st.line_chart(mass_index.mass_index())
 
 # Display the DataFrame for Mass Index (optional)
 st.subheader("DataFrame with Mass Index Indicator")
-st.write(data)
-##############################################################################
-
-# Calculate Parabolic SAR
-psar_indicator = ta.trend.PSARIndicator(high=data['High'], low=data['Low'], acceleration=0.02, max_acceleration=0.2)
-
-st.title("Parabolic SAR Visualization")
-
-st.header("ta.trend.PSARIndicator")
-st.text("The Parabolic SAR (Stop and Reverse) is a trend-following indicator that provides potential reversal points for the price movement.")
-
-st.line_chart(psar_indicator.psar())
-
-st.subheader("DataFrame with Parabolic SAR Indicator")
 st.write(data)
 
 
