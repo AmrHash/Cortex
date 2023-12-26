@@ -1,3 +1,4 @@
+import plotly
 from plotly import graph_objs as go
 from datetime import date
 import ta
